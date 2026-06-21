@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Permana Tech — Digital & Creative</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #000000;
+    --dark: #0a0a0a;
+    --dark2: #111111;
+    --card: #141414;
+    --border: #222222;
+    --red: #CC0000;
+    --red-bright: #FF1111;
+    --white: #FFFFFF;
+    --grey: #888888;
+    --grey-light: #aaaaaa;
+    --font-display: 'Orbitron', monospace;
+    --font-body: 'Inter', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--red); }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(204,0,0,0.15);
+    transition: padding 0.3s;
+  }
+  nav.scrolled { padding: 14px 60px; }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none;
+  }
+  .nav-logo-icon {
+    width: 38px; height: 38px;
+  }
+  .nav-logo-text {
+    font-family: var(--font-display);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--white);
+  }
+  .nav-logo-text span { color: var(--red); }
+
+  .nav-links {
+    display: flex; gap: 36px; list-style: none;
+  }
+  .nav-links a {
+    font-family: var(--font-display);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--grey-light);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    background: var(--red);
+    color: var(--white) !important;
+    padding: 10px 22px;
+    border: none;
+    font-family: var(--font-display);
+    font-size: 10px !important;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+  .nav-cta:hover { background: var(--red-bright); transform: scale(1.03); }
+
+  /* HERO */
+  #hero {
+    position: relative;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Grid background */
+  #hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(204,0,0,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(204,0,0,0.06) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridPulse 8s ease-in-out infinite;
+  }
+
+  @keyframes gridPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+
+  /* Vignette */
+  #hero::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.85) 100%);
+  }
+
+  #particles-canvas {
+    position: absolute; inset: 0; z-index: 0;
+  }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center;
+  }
+
+  .hero-logo {
+    width: 120px; height: 120px;
+    margin-bottom: 32px;
+    animation: logoFloat 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 30px rgba(204,0,0,0.5));
+  }
+
+  @keyframes logoFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    color: var(--red);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 6vw, 80px);
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: 0.06em;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .hero-subtitle {
+    font-family: var(--font-display);
+    font-size: clamp(12px, 2vw, 18px);
+    font-weight: 400;
+    letter-spacing: 0.35em;
+    color: var(--grey-light);
+    margin-bottom: 36px;
+    text-transform: uppercase;
+  }
+
+  .hero-desc {
+    font-size: 16px;
+    color: var(--grey-light);
+    max-width: 560px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+    font-weight: 300;
+  }
+
+  .hero-actions {
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  }
+
+  .btn-primary {
+    background: var(--red);
+    color: var(--white);
+    padding: 16px 40px;
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .btn-primary:hover {
+    background: var(--red-bright);
+    box-shadow: 0 0 30px rgba(204,0,0,0.5);
+    transform: translateY(-2px);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--white);
+    padding: 15px 40px;
+    border: 1px solid rgba(255,255,255,0.25);
+    font-family: var(--font-display);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: border-color 0.2s, background 0.2s, transform 0.15s;
+    display: inline-flex; align-items: center; gap: 10px;
+  }
+  .btn-secondary:hover {
+    border-color: var(--red);
+    background: rgba(204,0,0,0.08);
+    transform: translateY(-2px);
+  }
+
+  .scroll-indicator {
+    position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+    z-index: 2;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+  }
+  .scroll-indicator span {
+    font-family: var(--font-display);
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--grey);
+    text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px; height: 50px;
+    background: linear-gradient(to bottom, var(--red), transparent);
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0% { transform: scaleY(0); transform-origin: top; }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* SECTIONS */
+  section {
+    padding: 100px 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-full {
+    max-width: 100%;
+    padding: 100px 0;
+    background: var(--dark2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .section-full > .inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 60px;
+  }
+
+  .section-eyebrow {
+    font-family: var(--font-display);
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-eyebrow::before {
+    content: '';
+    width: 30px; height: 1px;
+    background: var(--red);
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(24px, 3.5vw, 44px);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    margin-bottom: 20px;
+  }
+
+  .section-body {
+    font-size: 16px;
+    color: var(--grey-light);
+    line-height: 1.8;
+    font-weight: 300;
+    max-width: 680px;
+  }
+
+  /* ABOUT */
+  #about .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+    margin-top: 60px;
+  }
+
+  .about-visual {
+    position: relative;
+  }
+  .about-logo-wrap {
+    width: 100%;
+    aspect-ratio: 1;
+    max-width: 380px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .about-logo-wrap::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(204,0,0,0.1) 0%, transparent 70%);
+  }
+  .about-logo-wrap img {
+    width: 75%;
+    position: relative; z-index: 1;
+  }
+  .about-badge {
+    position: absolute;
+    bottom: -16px; right: -16px;
+    background: var(--red);
+    padding: 16px 20px;
+    font-family: var(--font-display);
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  .about-text .stat-row {
+    display: flex; gap: 40px; margin-top: 40px; margin-bottom: 36px;
+  }
+  .stat-item { display: flex; flex-direction: column; gap: 4px; }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1;
+  }
+  .stat-num span { color: var(--red); }
+  .stat-label {
+    font-size: 12px;
+    color: var(--grey);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* SERVICES */
+  #services { padding-top: 100px; padding-bottom: 100px; }
+  .services-header { max-width: 680px; margin-bottom: 60px; }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .service-card {
+    background: var(--card);
+    padding: 40px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--red);
+    transform: scaleX(0);
+    transition: transform 0.3s;
+    transform-origin: left;
+  }
+  .service-card:hover { background: #1a1a1a; }
+  .service-card:hover::before { transform: scaleX(1); }
+
+  .service-icon {
+    width: 44px; height: 44px;
+    background: rgba(204,0,0,0.12);
+    border: 1px solid rgba(204,0,0,0.3);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 24px;
+    font-size: 20px;
+  }
+  .service-name {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--white);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+  .service-desc {
+    font-size: 14px;
+    color: var(--grey);
+    line-height: 1.7;
+  }
+
+  /* VISION MISSION */
+  .vm-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 60px;
+  }
+
+  .vm-card {
+    background: var(--dark);
+    border: 1px solid var(--border);
+    padding: 48px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .vm-card::after {
+    content: '';
+    position: absolute; top: 0; right: 0;
+    width: 80px; height: 80px;
+    background: radial-gradient(ellipse at top right, rgba(204,0,0,0.15), transparent 70%);
+  }
+  .vm-label {
+    font-family: var(--font-display);
+    font-size: 9px;
+    letter-spacing: 0.4em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .vm-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+  .vm-body {
+    font-size: 15px;
+    color: var(--grey-light);
+    line-height: 1.8;
+    font-weight: 300;
+  }
+  .vm-body li {
+    list-style: none;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .vm-body li::before {
+    content: '—';
+    color: var(--red);
+    flex-shrink: 0;
+    font-size: 12px;
+    margin-top: 3px;
+  }
+
+  /* CTA SECTION */
+  #cta {
+    padding: 100px 60px;
+    max-width: 100%;
+    text-align: center;
+    background: var(--black);
+    position: relative;
+    overflow: hidden;
+  }
+  #cta::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(204,0,0,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(204,0,0,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  #cta::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at center, rgba(204,0,0,0.12) 0%, transparent 65%);
+  }
+  .cta-inner {
+    position: relative; z-index: 2;
+    max-width: 700px; margin: 0 auto;
+  }
+  .cta-label {
+    font-family: var(--font-display);
+    font-size: 10px;
+    letter-spacing: 0.4em;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .cta-title {
+    font-family: var(--font-display);
+    font-size: clamp(28px, 4vw, 52px);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: 0.04em;
+    color: var(--white);
+    margin-bottom: 20px;
+  }
+  .cta-body {
+    font-size: 16px;
+    color: var(--grey-light);
+    line-height: 1.7;
+    margin-bottom: 48px;
+    font-weight: 300;
+  }
+  .cta-actions {
+    display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;
+  }
+
+  /* CONTACT SECTION */
+  #contact .section-full {
+    border: none;
+    background: var(--dark2);
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    margin-top: 60px;
+    align-items: start;
+  }
+
+  .contact-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 40px 36px;
+    transition: border-color 0.2s;
+  }
+  .contact-card:hover { border-color: rgba(204,0,0,0.3); }
+  .contact-card-icon { font-size: 28px; margin-bottom: 16px; }
+  .contact-card-title {
+    font-family: var(--font-display);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--white);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .contact-card-body {
+    font-size: 14px;
+    color: var(--grey-light);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    background: var(--black);
+  }
+  .footer-brand {
+    display: flex; align-items: center; gap: 12px;
+  }
+  .footer-brand svg { width: 28px; height: 28px; }
+  .footer-brand-name {
+    font-family: var(--font-display);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+  }
+  .footer-brand-name span { color: var(--red); }
+  .footer-copy {
+    font-size: 12px;
+    color: var(--grey);
+    letter-spacing: 0.04em;
+  }
+  .footer-wa {
+    font-family: var(--font-display);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--grey);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-wa:hover { color: var(--white); }
+
+  /* REVEAL ANIMATION */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+  .reveal-delay-5 { transition-delay: 0.5s; }
+
+  /* WA ICON */
+  .wa-icon { font-size: 14px; }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    section { padding: 70px 24px; }
+    .section-full > .inner { padding: 0 24px; }
+    #about .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .about-logo-wrap { max-width: 280px; }
+    .services-grid { grid-template-columns: 1fr; }
+    .vm-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; gap: 24px; }
+    footer { padding: 30px 24px; flex-direction: column; align-items: flex-start; }
+    #cta { padding: 80px 24px; }
+    .cta-actions { flex-direction: column; align-items: center; }
+    .hero-actions { flex-direction: column; align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="navbar">
+<img src="img.jpg" width="30">
+    <div class="nav-logo-text">PERMANA <span>TECH</span></div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">Tentang</a></li>
+    <li><a href="#services">Layanan</a></li>
+    <li><a href="#vision">Visi & Misi</a></li>
+    <li><a href="#contact">Kontak</a></li>
+  </ul>
+  <a href="https://wa.me/6281994393905?text=Halo%20Permana%20Tech%2C%20saya%20ingin%20order%20sekarang" target="_blank" class="nav-cta">Order Sekarang</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="particles-canvas"></canvas>
+  <div class="hero-content">
+    <img src="img.jpg" alt="Permana Tech Logo" class="hero-logo" id="heroLogo" style="width:130px;height:130px;object-fit:contain;border-radius:0;">
+    <div class="hero-eyebrow">Digital & Creative Agency</div>
+    <h1 class="hero-title">PERMANA TECH</h1>
+    <div class="hero-subtitle">Solusi Digital Terdepan</div>
+    <p class="hero-desc">Kami hadir untuk mengakselerasi bisnis Anda melalui solusi teknologi, desain kreatif, dan strategi digital yang presisi — dirancang untuk masa depan.</p>
+    <div class="hero-actions">
+      <a href="https://wa.me/6281994393905?text=Halo%20Permana%20Tech%2C%20saya%20ingin%20order%20sekarang!" target="_blank" class="btn-primary">
+        <span class="wa-icon">📲</span> Order Sekarang
+      </a>
+      <a href="https://wa.me/6281994393905?text=Halo%20Permana%20Tech%2C%20saya%20ingin%20tanya-tanya%20dulu%20dan%20konsultasi%20kebutuhan%20saya" target="_blank" class="btn-secondary">
+        💬 Konsultasi Gratis
+      </a>
+    </div>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="about-grid">
+    <div class="about-visual reveal">
+      <div class="about-logo-wrap">
+        <img src="img2.png" alt="Permana Tech">
+      </div>
+      <div class="about-badge">Est. 2020</div>
+    </div>
+    <div class="about-text">
+      <div class="section-eyebrow reveal">Tentang Kami</div>
+      <h2 class="section-title reveal reveal-delay-1">Apa itu<br>Permana Tech?</h2>
+      <p class="section-body reveal reveal-delay-2">
+        Permana Tech adalah perusahaan teknologi dan kreatif digital yang berfokus pada pembangunan ekosistem digital bisnis Anda — mulai dari desain branding, pengembangan website, aplikasi mobile, hingga strategi pemasaran digital yang terukur dan berbasis data.
+      </p>
+      <p class="section-body reveal reveal-delay-3" style="margin-top:16px;">
+        Kami percaya bahwa teknologi bukan sekadar alat — melainkan fondasi pertumbuhan bisnis di era modern. Dengan tim profesional berpengalaman, kami menghadirkan solusi yang tidak hanya estetis, tetapi juga fungsional dan scalable untuk jangka panjang.
+      </p>
+      <div class="stat-row reveal reveal-delay-4">
+        <div class="stat-item">
+          <div class="stat-num">100<span>+</span></div>
+          <div class="stat-label">Klien Puas</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">50<span>+</span></div>
+          <div class="stat-label">Proyek Selesai</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">5<span>+</span></div>
+          <div class="stat-label">Tahun Pengalaman</div>
+        </div>
+      </div>
+      <a href="https://wa.me/6281994393905?text=Halo%20Permana%20Tech%2C%20saya%20ingin%20tanya-tanya%20dulu%20dan%20konsultasi%20kebutuhan%20saya" target="_blank" class="btn-primary reveal reveal-delay-5" style="display:inline-flex;">
+        💬 Tanya-Tanya Dulu
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<div class="section-full">
+  <section id="services" style="padding:0;">
+    <div class="inner" style="padding:0 60px;">
+      <div class="services-header">
+        <div class="section-eyebrow reveal">Layanan Kami</div>
+        <h2 class="section-title reveal reveal-delay-1">Solusi Digital<br>Lengkap untuk Bisnis Anda</h2>
+        <p class="section-body reveal reveal-delay-2">Dari konsep hingga launch — kami menangani semuanya dengan standar kualitas premium.</p>
+      </div>
+      <div class="services-grid reveal reveal-delay-2">
+        <div class="service-card">
+          <div class="service-icon">🌐</div>
+          <div class="service-name">Website Development</div>
+          <div class="service-desc">Pengembangan website profesional yang responsif, cepat, dan dioptimasi SEO untuk mendorong pertumbuhan bisnis Anda secara online.</div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">📱</div>
+          <div class="service-name">Aplikasi Mobile</div>
+          <div class="service-desc">Desain dan pengembangan aplikasi Android & iOS yang intuitif, scalable, dan siap bersaing di pasar digital masa kini.</div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🎨</div>
+          <div class="service-name">Desain Branding</div>
+          <div class="service-desc">Identitas visual yang kuat — logo, brand guideline, dan materi pemasaran yang mencerminkan esensi dan nilai bisnis Anda.</div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">📈</div>
+          <div class="service-name">Digital Marketing</div>
+          <div class="service-desc">Strategi pemasaran digital terukur: SEO, iklan berbayar, social media management, dan konten marketing berbasis data.</div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🛒</div>
+          <div class="service-name">Toko Online / E-Commerce</div>
+          <div class="service-desc">Platform belanja online yang aman, cepat, dan mudah dikelola — dengan integrasi payment gateway dan manajemen produk lengkap.</div>
+        </div>
+        <div class="service-card">
+          <div class="service-icon">🤖</div>
+          <div class="service-name">Otomasi & Sistem IT</div>
+          <div class="service-desc">Solusi otomasi bisnis, sistem manajemen internal, dan integrasi teknologi untuk meningkatkan efisiensi operasional perusahaan Anda.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- VISION & MISSION -->
+<section id="vision">
+  <div class="section-eyebrow reveal">Arah & Tujuan</div>
+  <h2 class="section-title reveal reveal-delay-1">Visi & Misi<br>Permana Tech</h2>
+  <div class="vm-grid">
+    <div class="vm-card reveal reveal-delay-2">
+      <div class="vm-label">Visi</div>
+      <div class="vm-title">Menjadi Mitra Teknologi Terpercaya di Asia Tenggara</div>
+      <p class="vm-body">
+        Permana Tech berkomitmen untuk menjadi perusahaan teknologi dan kreatif digital terdepan yang mendorong transformasi digital UMKM dan perusahaan skala menengah di Indonesia hingga Asia Tenggara — dengan solusi inovatif, berkelanjutan, dan berdampak nyata.
+      </p>
+    </div>
+    <div class="vm-card reveal reveal-delay-3">
+      <div class="vm-label">Misi</div>
+      <div class="vm-title">Komitmen Kami untuk Klien</div>
+      <ul class="vm-body">
+        <li>Menghadirkan solusi digital berkualitas tinggi yang sesuai kebutuhan dan anggaran klien.</li>
+        <li>Membangun hubungan jangka panjang berbasis kepercayaan, transparansi, dan hasil nyata.</li>
+        <li>Mendorong inovasi berkelanjutan dengan memanfaatkan teknologi terkini.</li>
+        <li>Memberdayakan pelaku bisnis lokal agar mampu bersaing di pasar global.</li>
+        <li>Memberikan layanan purna jual dan dukungan teknis yang responsif dan profesional.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div id="cta">
+  <div class="cta-inner">
+    <div class="cta-label reveal">Mulai Sekarang</div>
+    <h2 class="cta-title reveal reveal-delay-1">Siap Wujudkan<br>Ide Digital Anda?</h2>
+    <p class="cta-body reveal reveal-delay-2">Jangan tunda lagi — setiap hari tanpa kehadiran digital yang kuat adalah kesempatan yang terlewat. Hubungi kami sekarang dan dapatkan konsultasi gratis bersama tim Permana Tech.</p>
+    <div class="cta-actions reveal reveal-delay-3">
+      <a href="https://wa.me/6281994393905?text=Halo%20Permana%20Tech%2C%20saya%20ingin%20order%20sekarang!" target="_blank" class="btn-primary">
+        📲 Order Sekarang
+      </a>
+      <a href="https://wa.me/6281994393905?text=Halo%20Permana%20Tech%2C%20saya%20ingin%20pesan%20sekarang" target="_blank" class="btn-secondary">
+        🛒 Pesan Sekarang
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<div class="section-full" id="contact">
+  <div class="inner">
+    <div class="section-eyebrow reveal">Hubungi Kami</div>
+    <h2 class="section-title reveal reveal-delay-1">Ada Pertanyaan?<br>Kami Siap Membantu</h2>
+    <div class="contact-grid">
+      <div class="contact-card reveal reveal-delay-2">
+        <div class="contact-card-icon">📞</div>
+        <div class="contact-card-title">Hubungi Admin</div>
+        <div class="contact-card-body">Tim kami siap menjawab pertanyaan Anda seputar layanan, harga, dan proses pengerjaan. Respon cepat, ramah, dan profesional.</div>
+        <a href="https://wa.me/6281994393905?text=Halo%20Admin%20Permana%20Tech%2C%20saya%20ingin%20menghubungi%20admin" target="_blank" class="btn-primary" style="font-size:10px;padding:14px 28px;">
+          📲 Hubungi Admin
+        </a>
+      </div>
+      <div class="contact-card reveal reveal-delay-3">
+        <div class="contact-card-icon">💬</div>
+        <div class="contact-card-title">Konsultasi Kebutuhan</div>
+        <div class="contact-card-body">Belum yakin dengan kebutuhan Anda? Ceritakan dulu ke kami — kami akan bantu analisa dan rekomendasikan solusi terbaik yang sesuai.</div>
+        <a href="https://wa.me/6281994393905?text=Halo%20Permana%20Tech%2C%20saya%20ingin%20tanya-tanya%20dulu%20dan%20konsultasi%20kebutuhan%20saya" target="_blank" class="btn-secondary" style="font-size:10px;padding:13px 28px;">
+          💬 Tanya-Tanya & Konsultasi
+        </a>
+      </div>
+    </div>
+    <div style="margin-top:48px;padding:32px;background:var(--dark);border:1px solid var(--border);display:flex;align-items:center;gap:20px;flex-wrap:wrap;" class="reveal reveal-delay-4">
+      <div style="font-family:var(--font-display);font-size:11px;letter-spacing:0.15em;color:var(--grey);text-transform:uppercase;">WhatsApp</div>
+      <div style="width:1px;height:24px;background:var(--border);"></div>
+      <a href="https://wa.me/6281994393905" target="_blank" style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--white);text-decoration:none;letter-spacing:0.05em;">+62 819-9439-3905</a>
+      <div style="flex:1;"></div>
+      <span style="font-size:12px;color:var(--grey);">Senin – Sabtu &nbsp;|&nbsp; 08.00 – 21.00 WIB</span>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <img src="img.jpg" width="80">
+    <div class="footer-brand-name">PERMANA <span>TECH</span></div>
+  </div>
+  <div class="footer-copy">© 2025 Permana Tech. Digital & Creative. All rights reserved.</div>
+  <a href="https://wa.me/6281994393905" target="_blank" class="footer-wa">+62 819-9439-3905</a>
+</footer>
+
+<script>
+// NAV SCROLL EFFECT
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// SCROLL REVEAL
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+reveals.forEach(el => observer.observe(el));
+
+// PARTICLE CANVAS
+const canvas = document.getElementById('particles-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+
+function resize() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener('resize', resize);
+
+class Particle {
+  constructor() { this.reset(); }
+  reset() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.vx = (Math.random() - 0.5) * 0.4;
+    this.vy = (Math.random() - 0.5) * 0.4;
+    this.alpha = Math.random() * 0.5 + 0.1;
+    this.size = Math.random() * 1.5 + 0.5;
+    this.red = Math.random() > 0.85;
+  }
+  update() {
+    this.x += this.vx; this.y += this.vy;
+    if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+  }
+  draw() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fillStyle = this.red ? `rgba(204,0,0,${this.alpha})` : `rgba(255,255,255,${this.alpha * 0.6})`;
+    ctx.fill();
+  }
+}
+
+for (let i = 0; i < 120; i++) particles.push(new Particle());
+
+function drawConnections() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const dist = Math.sqrt(dx*dx + dy*dy);
+      if (dist < 100) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        const alpha = (1 - dist/100) * 0.12;
+        ctx.strokeStyle = `rgba(204,0,0,${alpha})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => { p.update(); p.draw(); });
+  drawConnections();
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
+</body>
+</html>
